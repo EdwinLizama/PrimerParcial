@@ -3,6 +3,7 @@ function indumentaria(name, id, precio, stock){
     this.id = id
     this.precio = precio
     this.stock = stock
+    
 }
 
 function camisa(name, id, precio, stock){
