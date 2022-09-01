@@ -18,9 +18,9 @@ const Zapato = (name, id, precio, stock) =>{
     return Object.assign({},prototype);
 }
 
-let camisa1 = Camisa("Camisa1", 1, 10, 2);
-let pantalon1 = Camisa("Camisa1", 1, 20, 2);
-let zapato1 = Camisa("Camisa1", 1, 15, 2);
+let camisa1 = Camisa("camisa", 1, 10, 2);
+let pantalon1 = Pantalon("pantalon", 2, 20, 2);
+let zapato1 = Zapato("zapato", 3, 15, 2);
 
 
 
@@ -32,68 +32,88 @@ const tienda = (() =>{
     let carritoCompras = []
 
     const agregarProducto = (producto) =>{
-        carritoCompras.push(producto)
-        actualizarInventario(producto)
-        //mensaje
+        
+        let bool = actualizarInventario(producto)
+        if(bool){
+            carritoCompras.push(producto)
+            alert("Producto agregado")
+        }else{
+            alert("No hay stock suficiente")
+        }
+        
     }
     
     const realizarPago = (carrito) =>{
         let sum = 0
-        carrito.foreach(compra =>{
+        carrito.forEach(compra =>{
             sum += compra.precio
+            
         })
+        return sum;
     }
 
     const actualizarInventario = (producto) =>{
         if(producto.stock > 0){
-        producto.stock--
+        producto.stock--;
+        return true;
+        }
+        else{
+            return false
         }
     }
 
     return {inventario, carritoCompras, agregarProducto, realizarPago}
 })();
 
-let div1 = document.getElementById("inventario")
-let div2 = document.getElementById("carrito")
+let div1 = document.getElementById("carrito")
+let div2 = document.getElementById("stock")
 //caja camisa
-let cajaCamisa = document.createElement("cajita")
-cajita.setAttribute("class", "camisa")
+let cajaCamisa = document.createElement("div")
+cajaCamisa.setAttribute("class", "camisa")
+cajaCamisa.innerText = "Camisa"
 //caja pantalon
-let cajaPantalon = document.createElement("cajita")
-cajita.setAttribute("class", "pantalon")
+let cajaPantalon = document.createElement("div")
+cajaPantalon.setAttribute("class", "pantalon")
+cajaPantalon.innerText = "Pantalon"
 //caja zapato
-let cajaZapato = document.createElement("cajita")
-cajita.setAttribute("class", "zapato")
+let cajaZapato = document.createElement("div")
+cajaZapato.setAttribute("class", "zapato")
+cajaZapato.innerText = "Zapato"
 
 //botones
-let botonAgregarCamisa = document.createElement("btn1")
-let botonAgregarPantalon = document.createElement("btn2")
-let botonAgregarZapato = document.createElement("btn3")
+let botonAgregarCamisa = document.getElementById("btn1")
+let botonAgregarPantalon = document.getElementById("btn2")
+let botonAgregarZapato = document.getElementById("btn3")
+let botonRealizarPago = document.getElementById("btn4")
 
 function mostrar(){
-    tienda.inventario.foreach(producto =>{
+    console.log(tienda.inventario)
+    let arr = tienda.inventario
+    arr.forEach(producto =>{
+        
+        div1.appendChild(cajaCamisa)
         for (let index = 0; index < producto.stock; index++) {
-            if(producto.name == "camisa"){
+            if(producto.id == 1){
             div1.appendChild(cajaCamisa)
             }
-            if(producto.name == "pantalon"){
+            if(producto.id == 2){
             div1.appendChild(cajaPantalon)
             }
-            if(producto.name == "zapato"){
+            if(producto.id == 3){
             div1.appendChild(cajaZapato)
             }
         }
     })
-    
-    tienda.carrito.foreach(producto =>{
+    let arr2 = tienda.carritoCompras
+    arr2.forEach(producto =>{
         for (let index = 0; index < producto.stock; index++) {
-            if(producto.name == "camisa"){
+        if(producto.id == 1){
             div2.appendChild(cajaCamisa)
             }
-            if(producto.name == "pantalon"){
+            if(producto.id == 2){
             div2.appendChild(cajaPantalon)
             }
-            if(producto.name == "zapato"){
+            if(producto.id == 3){
             div2.appendChild(cajaZapato)
             }
         }
@@ -104,28 +124,30 @@ mostrar()
 
 
 botonAgregarCamisa.addEventListener("click", () =>{
-    agregarProducto(inventario[0])
+    let objeto = tienda.inventario[0]
+    tienda.agregarProducto(objeto)
     div1.innerHTML=''
     div2.innerHTML=''
     mostrar()
 })
 botonAgregarPantalon.addEventListener("click", () =>{
-    agregarProducto(inventario[1])
+    let objeto = tienda.inventario[1]
+    tienda.agregarProducto(objeto)
     div1.innerHTML=''
     div2.innerHTML=''
     mostrar()
 })
-botonAgregarZapato.addEventListener("click", () =>{ 
-    agregarProducto(inventario[2])
+botonAgregarZapato.addEventListener("click", () =>{     
+    let objeto = tienda.inventario[2]
+    tienda.agregarProducto(objeto)
     div1.innerHTML=''
     div2.innerHTML=''
     mostrar()
 })
+botonRealizarPago.addEventListener("click", () =>{
+    let pago = tienda.realizarPago(tienda.carritoCompras)
+    alert("El pago es de: " + pago)
+    div2.innerHTML=''
 
-
- 
-
-
-
-
+})
 
