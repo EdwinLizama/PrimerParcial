@@ -1,0 +1,17 @@
+#carrito{
+    width: 50%;
+    height: 90%;
+    background-color: blue;
+    float: left;
+}
+#stock{
+    width: 50%;
+    height: 90%;
+    background-color: red;
+    float: right;
+}
+
+#container{
+    width: 100%;
+    height: 10%;
+}
